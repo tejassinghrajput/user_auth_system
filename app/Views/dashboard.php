@@ -140,9 +140,6 @@ $userData = session()->get('user');
                             <li class="list-group-item">
                                 <strong>Joined At:</strong> <?php echo htmlspecialchars($userData['created_at']); ?>
                             </li>
-                            <li class="list-group-item">
-                                <strong>XYZ At:</strong> <?php echo $userData['id']; ?>
-                            </li>
                         </ul>
                     </div>
                     <div class="card-footer text-center">
@@ -170,6 +167,10 @@ $userData = session()->get('user');
             <div id="password-section" style="display: none;">
                 <label for="newPassword">Password:</label>
                 <input type="password" id="newPassword" name="newPassword" class="form-control" required><br>
+            </div>
+            <div id="email-section" style="display: none;">
+                <label for="newEmail">Email:</label>
+                <input type="email" id="newEmail" name="newEmail" class="form-control" required><br>
             </div>
 
             <div class="popup-btns">
@@ -215,12 +216,18 @@ $userData = session()->get('user');
                 } else {
                     document.getElementById("newUsername").removeAttribute('required');
                 }
+                if (userDetails.email == '1') {
+                    document.getElementById("email-section").style.display = "block";
+                } else {
+                    document.getElementById("newEmail").removeAttribute('required');
+                }
 
-                if (userDetails.password !== '1' && userDetails.phone !== '1' && userDetails.username !== '1') {
+                if (userDetails.password !== '1' && userDetails.phone !== '1' && userDetails.username !== '1' && userDetails.email !== '1') {
                     document.getElementById("popup").style.display = "none";
                 } else {
                     document.getElementById("popup").style.display = "block";
                 }
+                
             } else {
                 console.error('No data or unexpected format:', data);
             }
@@ -235,6 +242,7 @@ $userData = session()->get('user');
             let newUsername = '';
             let newPhone = '';
             let newPassword = '';
+            let newEmail = '';
 
             if (document.getElementById("username-section").style.display !== "none") {
                 newUsername = document.getElementById("newUsername").value;
@@ -247,6 +255,9 @@ $userData = session()->get('user');
             if (document.getElementById("password-section").style.display !== "none") {
                 newPassword = document.getElementById("newPassword").value;
             }
+            if (document.getElementById("email-section").style.display !== "none") {
+                newEmail = document.getElementById("newEmail").value;
+            }
 
             const response = await fetch('/api/updateDetails', {
                 method: 'POST',
@@ -257,7 +268,8 @@ $userData = session()->get('user');
                     'id' : userId,
                     'phone': newPhone,
                     'password': newPassword,
-                    'username': newUsername
+                    'username': newUsername,
+                    'email': newEmail,
                 }),
             });
 
@@ -266,6 +278,9 @@ $userData = session()->get('user');
             if (data.success) {
                 showToast('Details updated successfully!', 'success');
                 document.getElementById("popup").style.display = "none";
+                setTimeout(() => {
+                    location.reload();
+                }, 3000); 
             } else {
                 showToast('Failed to update details.', 'error');
             }

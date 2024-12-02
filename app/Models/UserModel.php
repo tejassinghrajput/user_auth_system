@@ -24,15 +24,18 @@ class UserModel extends Model{
         return $query;
     }
 
-    public function insrtdetailsByArray($keys, $values, $userId){
+    public function insertdetailsByArray($data, $userId) {
         $setValues = [];
-        foreach ($keys as $index => $key) {
-            $setValues[] = "$key = '{$values[$index]}'";
+        foreach ($data as $key => $value) {
+            $setValues[] = "$key = '{$value}'";
+        }
+        if (empty($setValues)) {
+            return false;
         }
         $setValuesStr = implode(", ", $setValues);
         $query = $this->db->query("UPDATE users SET $setValuesStr WHERE id = '$userId'");
         return $query;
-    }
+    }    
 
     public function getuserByPhone($phone){
         $query = $this->db->query("SELECT * FROM users WHERE phone = '$phone'")->getRowArray();
@@ -41,6 +44,11 @@ class UserModel extends Model{
 
     public function addOnlyPhone($phone){
         $query = $this->db->query("INSERT INTO users (phone, type) VALUES ('$phone','3')");
+        return $query;
+    }
+
+    public function getUserById($userId){
+        $query = $this->db->query("SELECT * FROM users WHERE id = '$userId'")->getRowArray();
         return $query;
     }
 }

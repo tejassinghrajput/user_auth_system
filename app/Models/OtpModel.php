@@ -16,13 +16,17 @@ class OtpModel extends Model
 
     public function verifyOtp($otp, $phone){
         $this->validateOtp($otp);
-        $query = "SELECT * FROM otp_verification WHERE otp = '$otp' AND phone = '$phone' AND status = 'valid'";
-        return $this->db->query($query)->getRowArray();
+        $query = $this->db->query("SELECT * FROM otp_verification WHERE otp = '$otp' AND phone = '$phone' AND status = 'valid'")->getRowArray();
+        $this->updateOtpstatus($query['id']);
+        return $query;
     }
 
     public function validateOtp($otp){
         $query = $this->db->query("UPDATE otp_verification SET status = 'exp' WHERE TIMESTAMPDIFF(SECOND, datetime, NOW())>60 AND status = 'valid'");
     }
 
+    public function updateOtpstatus($id){
+        $query = $this->db->query("UPDATE otp_verification SET status ='exp' WHERE id ='$id'");
+    }
     
 }

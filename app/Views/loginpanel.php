@@ -269,6 +269,7 @@
       <input type="email" name="email" placeholder="Enter your Email ID" required>
       <input type="password" name="password" placeholder="Enter Password" required>
       <a href="#" class="forgot-password">Forgot Password?</a>
+      <span style='color:red'><?php if(session()->getFlashdata('error')!==null){echo session()->getFlashdata('error');}?></span>
       <button type="submit" class="login-button">Login</button>
     </form>
     <p class="signup-link">New to ShipGlobal? <a href="/signup">Sign Up Now</a></p>
