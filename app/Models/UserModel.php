@@ -33,4 +33,14 @@ class UserModel extends Model{
         $query = $this->db->query("UPDATE users SET $setValuesStr WHERE id = '$userId'");
         return $query;
     }
+
+    public function getuserByPhone($phone){
+        $query = $this->db->query("SELECT * FROM users WHERE phone = '$phone'")->getRowArray();
+        return $query;
+    }
+
+    public function addOnlyPhone($phone){
+        $query = $this->db->query("INSERT INTO users (phone, type) VALUES ('$phone','3')");
+        return $query;
+    }
 }

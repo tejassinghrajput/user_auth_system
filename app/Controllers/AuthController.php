@@ -23,13 +23,16 @@ class AuthController extends BaseController{
         return view('signuppanel');
     }
 
-    public function verifyEmailLogin(){
+    public function verifyLogin($check){
+        
+        $email = $this->request->getPost('email') ? $this->request->getPost('email') : '';
+        $password = $this->request->getPost('password') ? $this->request->getPost('password') : '';
+        $phone = $this->request->getPost('phone') ? $this->request->getPost('phone') : '';
+        $otp = $this->request->getPost('otp') ? $this->request->getPost('otp') : '';
 
-        $email = $this->request->getPost('email');
-        $password = $this->request->getPost('password');
-
-        $authService = AuthServiceFactory::create('email');
-        $user = $authService->authenticate(['email' => $email, 'password' => $password]);
+        $authService = AuthServiceFactory::create($check);
+        
+        $user = $authService->authenticate(['email' => $email, 'password' => $password, 'phone' => $phone, 'otp' => $otp]);
 
         if($user){
             session()->set(['user' => $user]);
@@ -119,7 +122,7 @@ class AuthController extends BaseController{
         }
     }
 
-    public function handlesocialLogin($type){
+    public function handlesocialLogin(){
 
         $user = session()->get('user');
         

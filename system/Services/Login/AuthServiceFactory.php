@@ -3,6 +3,7 @@ namespace App\Services\Login;
 
 use App\Services\Login\UserLoginService;
 use App\Services\Login\GoogleLoginService;
+use App\Services\Login\OtpLoginService;
 
 class AuthServiceFactory{
 
@@ -12,6 +13,8 @@ class AuthServiceFactory{
                 return new UserLoginService();
             case 'google':
                 return new GoogleLoginService();
+            case 'phone':
+                return new OtpLoginService();
             default:
                 throw new \Exception("Unsupported authentication type");
         }
